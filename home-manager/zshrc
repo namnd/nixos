@@ -1,0 +1,81 @@
+SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+export SSH_AUTH_SOCK
+
+
+function chpwd() { LC_ALL=C ls -l --color=auto --group-directories-first } # always list upon pwd changed
+function preexec() { cmd_start=$(($(print -P %D{%s%6.}) / 1000)) }
+function precmd() {
+  if [ $cmd_start ]; then
+    local now=$(($(print -P %D{%s%6.}) / 1000))
+    local d_ms=$(($now - $cmd_start))
+    local d_s=$((d_ms / 1000))
+    local ms=$((d_ms % 1000))
+    local s=$((d_s % 60))
+    local m=$(((d_s / 60) % 60))
+    local h=$((d_s / 3600))
+
+    if   ((h > 0)); then cmd_time=${h}h${m}m
+    elif ((m > 0)); then cmd_time=${m}m${s}s
+    elif ((s > 9)); then cmd_time=${s}.$(printf %03d $ms | cut -c1-2)s # 12.34s
+    elif ((s > 0)); then cmd_time=${s}.$(printf %03d $ms)s # 1.234s
+    else cmd_time=${ms}ms
+    fi
+
+    unset cmd_start
+  else
+    # Clear previous result when hitting Return with no command to execute
+    unset cmd_time
+  fi
+
+  vcs_info
+
+  print -Pn "\e]2;%n@%M $ %~\a"
+}
+
+# right prompt
+autoload -Uz vcs_info # make sure vcs_info function is available
+setopt prompt_subst # allow dynamic command prompt
+zstyle ':vcs_info:*' check-for-changes true # unsubmitted changes
+zstyle ':vcs_info:*' stagedstr '%{%F{green}%B%} ●%{%b%f%}' # staged changes
+zstyle ':vcs_info:*' unstagedstr '%{%F{red}%B%} ●%{%b%f%}' # unstaged changes
+zstyle ':vcs_info:*' formats ' %{%F{250}%}%25>…>%b%<<%{%f%}%{%f%}%c%u'
+RPROMPT='${vcs_info_msg_0_}'
+
+# left prompt
+PROMPT="$PROMPT%F{240}%~%F{255}"                # cwd
+PROMPT='%F{240}$(if [ $cmd_time ]; then echo "%D{%L:%M:%S} ($cmd_time)%F{255}"; fi)'
+NEWLINE=$'\n'
+PROMPT="$PROMPT %F{blue}%~%F{none}${NEWLINE}"
+PROMPT="$PROMPT%F{green}%n%F{240}"                # username
+
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  PROMPT="$PROMPT@%F{magenta}%M%F{none}"
+fi
+
+function cur_aws_vlt() {
+  if [ -n "${AWS_VAULT}" ]; then
+    color=magenta
+    flag=
+    case $AWS_VAULT in
+      dev)
+        color=yellow
+        ;;
+      prod)
+        flag=🇦🇺
+        ;;
+      produs)
+        flag=🇺🇸
+        ;;
+      prodae)
+        flag=🇦🇪
+        ;;
+    esac
+    date=$(date --date $AWS_CREDENTIAL_EXPIRATION +%H:%M)
+    echo " %{%F{$color}%}($AWS_VAULT $flag ~ $date)%{$reset_color%}"
+  fi
+}
+
+PROMPT="$PROMPT%{$fg[yellow]%}$(cur_aws_vlt)%F{none}"
+PROMPT="$PROMPT%(?..%F{red} %?)%F{none}"        # error code
+PROMPT="$PROMPT %F{240}$ "
+PROMPT="$PROMPT%F{yellow}%(1j.(%j) .)%f"        # jobs in background
