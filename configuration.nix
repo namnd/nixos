@@ -44,6 +44,8 @@
     variant = "";
   };
 
+  services.clipmenu.enable = true;
+
   users.users.namnguyen = {
     isNormalUser = true;
     description = "Nam Nguyen";
