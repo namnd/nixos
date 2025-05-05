@@ -15,6 +15,7 @@ in
   home.packages = with pkgs; [
     unstable.neovim 
     unstable.awscli2
+    aws-vault
     fzf
     fd
     ripgrep
@@ -103,6 +104,7 @@ in
       gl = "git log";
       gg = "git graph";
       mcd = "f() { mkdir -p $1 && cd $1 }; f";
+      v = "aws-vault exec --debug --backend=file --duration=1h";
       psql = "PAGER=\"nvim -c 'set nomod nolist nowrap syntax=sql'\" psql";
     };
   };
