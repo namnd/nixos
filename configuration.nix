@@ -42,6 +42,7 @@
   services.xserver.xkb = {
     layout = "au";
     variant = "";
+    options = "caps:swapescape,altwin:swap_lalt_lwin";
   };
 
   services.clipmenu.enable = true;
