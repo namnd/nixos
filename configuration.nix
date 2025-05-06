@@ -42,7 +42,7 @@
   services.xserver.xkb = {
     layout = "au";
     variant = "";
-    options = "caps:swapescape,altwin:swap_lalt_lwin";
+    # options = "caps:swapescape"; # only enable if not using external keyboard
   };
 
   services.clipmenu.enable = true;
