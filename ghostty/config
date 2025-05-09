@@ -4,3 +4,5 @@ font-size = 16
 theme = Wombat
 unfocused-split-opacity = 0.3
 
+keybind = super+t=new_tab
+keybind = super+w=close_tab
