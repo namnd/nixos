@@ -1,0 +1,3 @@
+xset r rate 250 45
+/usr/local/bin/clipmenud &!
+/usr/bin/vmtoolsd -n vmusr &!
