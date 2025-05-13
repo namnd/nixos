@@ -1,5 +1,8 @@
 { pkgs, ... }:
 
+let nixos2411 = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-24.11.tar.gz") {};
+in
+
 {
   home.username = builtins.getEnv "USER";
   home.homeDirectory = builtins.getEnv "HOME";
@@ -21,7 +24,7 @@
 
     awscli2
     confluent-cli
-
+    nixos2411.kubectl
   ];
 
   home.sessionVariables = {
