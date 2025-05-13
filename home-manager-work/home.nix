@@ -13,7 +13,6 @@ in
 
   home.packages = with pkgs; [
     neovim
-    gh
 
     fzf
     fd
@@ -41,6 +40,11 @@ in
       ll = "ls -alF";
       la = "ls -A";
       l = "ls -CF";
+
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper = {
+      enable = true;
     };
   };
 
