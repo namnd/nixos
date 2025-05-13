@@ -1,15 +1,34 @@
 bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
 
+MAGENTA=$(tput setaf 5)
 BLUE=$(tput setaf 4)
 YELLOW=$(tput setaf 3)
 GREEN=$(tput setaf 2)
 RED=$(tput setaf 1)
 RESET=$(tput sgr0)
 
-bg_jobs() {
+__bg_jobs() {
   if [ -n "$(jobs -p)" ]; then echo " ${YELLOW}(\j)${RESET}"; fi
 }
 
-PROMPT_COMMAND='PS1="${BLUE}\w${RESET}$(__git_ps1 " ${GREEN}(%s)${RESET}") ${RED}\${?#0}${RESET}\$$(bg_jobs) "'
+__kube_ps1() {
+  CONTEXT=$(grep "current-context:" ~/.kube/config | sed "s/current-context: //" | tr -d '"')
+  if [ -z "${CONTEXT}" ]; then
+    return
+  fi
+
+  case "$CONTEXT" in
+    *"prod"*)
+      echo "${MAGENTA}(k8s: ${CONTEXT})${RESET}";;
+    *)
+      echo "(k8s: ${CONTEXT})";;
+  esac
+}
+
+prompt() {
+  PS1="${BLUE}\w${RESET}$(__git_ps1 " ${GREEN}(%s)${RESET}") $(__kube_ps1)\n ${RED}\${?#0}${RESET}\$$(__bg_jobs) "
+}
+
+PROMPT_COMMAND=prompt
 
