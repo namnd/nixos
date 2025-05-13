@@ -40,6 +40,22 @@ in
       ll = "ls -alF";
       la = "ls -A";
       l = "ls -CF";
+      ".." = "cd ..";
+      ".2" = "cd ../..";
+      ".3" = "cd ../../..";
+      ".4" = "cd ../../../..";
+      ".5" = "cd ../../../../..";
+      ga = "git add --patch";
+      gb = "git branch";
+      gs = "git status";
+      gc = "git checkout";
+      gp = "git pull";
+      gP = "git push";
+      gd = "git diff";
+      gl = "git log";
+      gg = "git graph";
+    };
+  };
 
   programs.gh = {
     enable = true;
