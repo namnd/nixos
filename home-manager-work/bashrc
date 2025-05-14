@@ -1,12 +1,12 @@
 bind '"\C-f": forward-word'
 bind '"\C-b": backward-word'
 
-MAGENTA=$(tput setaf 5)
-BLUE=$(tput setaf 4)
-YELLOW=$(tput setaf 3)
-GREEN=$(tput setaf 2)
-RED=$(tput setaf 1)
-RESET=$(tput sgr0)
+MAGENTA="\[$(tput setaf 5)\]"
+BLUE="\[$(tput setaf 4)\]"
+YELLOW="\[$(tput setaf 3)\]"
+GREEN="\[$(tput setaf 2)\]"
+RED="\[$(tput setaf 1)\]"
+RESET="\[$(tput sgr0)\]"
 
 __bg_jobs() {
   if [ -n "$(jobs -p)" ]; then echo " ${YELLOW}(\j)${RESET}"; fi
