@@ -8,6 +8,24 @@ GREEN="\[$(tput setaf 2)\]"
 RED="\[$(tput setaf 1)\]"
 RESET="\[$(tput sgr0)\]"
 
+v() {
+  if [ -z "$1" ]; then
+    return 1
+  fi
+
+  case "$1" in
+    *)
+      echo "Invalid env"
+      return 1
+      ;;
+
+  esac
+
+  kubectl config use-context "$context"
+  aws-vault exec --debug --backend=file --duration=1h "$1"
+  kubectl config unset current-context
+}
+
 __bg_jobs() {
   if [ -n "$(jobs -p)" ]; then echo " ${YELLOW}(\j)${RESET}"; fi
 }
@@ -20,14 +38,25 @@ __kube_ps1() {
 
   case "$CONTEXT" in
     *"prod"*)
-      echo "${MAGENTA}(k8s: ${CONTEXT})${RESET}";;
+      echo "${MAGENTA} (k8s: ${CONTEXT})${RESET}";;
     *)
-      echo "(k8s: ${CONTEXT})";;
+      echo " (k8s: ${CONTEXT})";;
   esac
 }
 
+__aws_vault_ps1() {
+  if [ -z "${AWS_VAULT}" ]; then
+    return
+  fi
+  case $AWS_VAULT in
+    *"prod"*)
+      color=${MAGENTA}
+  esac
+  echo " ${color}($AWS_VAULT)${RESET}"
+}
+
 prompt() {
-  PS1="${BLUE}\w${RESET}$(__git_ps1 " ${GREEN}(%s)${RESET}") $(__kube_ps1)\n ${RED}\${?#0}${RESET}\$$(__bg_jobs) "
+  PS1="${BLUE}\w${RESET}$(__git_ps1 " ${GREEN}(%s)${RESET}")$(__aws_vault_ps1)$(__kube_ps1)\n ${RED}\${?#0}${RESET}\$$(__bg_jobs) "
 }
 
 PROMPT_COMMAND=prompt

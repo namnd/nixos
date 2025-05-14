@@ -24,6 +24,11 @@ in
     awscli2
     confluent-cli
     nixos2411.kubectl
+    nixos2411.kubernetes-helm
+    terraform
+    terraform-ls
+
+    aws-vault
   ];
 
   home.sessionVariables = {
