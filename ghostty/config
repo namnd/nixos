@@ -6,3 +6,9 @@ unfocused-split-opacity = 0.3
 
 keybind = super+t=new_tab
 keybind = super+w=close_tab
+keybind = super+shift+right_bracket=next_tab
+keybind = super+shift+left_bracket=previous_tab
+keybind = super+o=new_split:right
+keybind = super+e=new_split:down
+keybind = super+right_bracket=goto_split:next
+keybind = super+left_bracket=goto_split:previous
