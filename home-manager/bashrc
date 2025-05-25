@@ -1,0 +1,20 @@
+bind '"\C-f": forward-word'
+bind '"\C-b": backward-word'
+
+source /run/current-system/sw/share/bash-completion/completions/git-prompt.sh
+
+BLUE="\[$(tput setaf 4)\]"
+YELLOW="\[$(tput setaf 3)\]"
+GREEN="\[$(tput setaf 2)\]"
+RED="\[$(tput setaf 1)\]"
+RESET="\[$(tput sgr0)\]"
+
+__bg_jobs() {
+  if [ -n "$(jobs -p)" ]; then echo " ${YELLOW}(\j)${RESET}"; fi
+}
+
+prompt() {
+  PS1="${BLUE}\w${RESET}$(__git_ps1 " ${GREEN}(%s)${RESET}")\n ${RED}\${?#0}${RESET}\$$(__bg_jobs) "
+}
+
+PROMPT_COMMAND=prompt

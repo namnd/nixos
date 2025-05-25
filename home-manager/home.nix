@@ -72,23 +72,16 @@ in
     ];
   };
 
-  programs.zsh = {
+  programs.bash = {
     enable = true;
-    autocd = true;
-    defaultKeymap = "emacs";
-    dotDir = "./.config/zsh";
-    history = {
-      expireDuplicatesFirst = true;
-      save = 10000;
-      share = true;
-      size = 10000;
-    };
-    initExtra = builtins.readFile ./zshrc;
+    historyControl = ["ignoreboth"];
+    initExtra = builtins.readFile ./bashrc;
     shellAliases = {
       vim = "nvim";
-      ls = "LC_ALL=C ls --color=auto --group-directories-first";
-      ll = "ls -l";
-      all = "ls -al";
+      ls = "ls --color=auto";
+      ll = "ls -alF";
+      la = "ls -A";
+      l = "ls -CF";
       ".." = "cd ..";
       ".2" = "cd ../..";
       ".3" = "cd ../../..";
@@ -103,10 +96,8 @@ in
       gd = "git diff";
       gl = "git log";
       gg = "git graph";
-      mcd = "f() { mkdir -p $1 && cd $1 }; f";
-      v = "aws-vault exec --debug --backend=file --duration=1h";
-      psql = "PAGER=\"nvim -c 'set nomod nolist nowrap syntax=sql'\" psql";
     };
+
   };
 
   programs.direnv = {

@@ -51,10 +51,8 @@
     isNormalUser = true;
     description = "Nam Nguyen";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
-    shell = pkgs.zsh;
   };
 
-  programs.zsh.enable = true;
   programs.ssh.startAgent = false;
 
   programs.gnupg.agent = {
