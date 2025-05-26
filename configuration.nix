@@ -20,7 +20,7 @@
   services.xserver.windowManager.dwm = {
     enable = true;
     package = pkgs.dwm.overrideAttrs {
-      src = /home/namnguyen/nixos/dwm;
+      src = builtins.fetchTarball "https://github.com/namnd/dwm/tarball/master";
     };
   };
 
